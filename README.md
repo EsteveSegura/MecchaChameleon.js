@@ -11,7 +11,8 @@ behind the figure with a live **brush** effect and overlay a **shadow** texture.
 
 Zero dependencies. Ships as native **ESM** (`import`) and **CommonJS/UMD**
 (`require` and `<script>`), and is **tree-shakeable** (`"sideEffects": false`,
-no top-level side effects). No images are bundled — you provide your own.
+no top-level side effects). The core ships no images (bring your own); optional
+presets with embedded images are available on demand.
 
 ## Install
 
@@ -83,27 +84,27 @@ Two assets are **required**: `image` (base color) and `normalMap`.
 | `normalMap` | — | Normal map, same framing as the figure. **Required.** |
 | `target` | `null` | CSS selector (`#id`/`.class`) the figure is centered over. It tracks the element on scroll/resize. `null` or a missing element falls back to the viewport center. |
 | `width` | `200` | Width in px (height keeps the image aspect). |
-| `animateLight` | `true` | Light orbits on its own. |
-| `lightIntensity` | `1.35` | Light intensity. |
+| `animateLight` | `false` | Light orbits on its own. |
+| `lightIntensity` | `0.45` | Light intensity. |
 | `ambient` | `0.22` | Fill light (0 = black shadows). |
 | `specularStrength` | `0.75` | Specular strength. |
 | `specularHardness` | `22` | Specular hardness (higher = smaller highlight). |
-| `relief` | `1.4` | Exaggerates the normal map. |
-| `lightZ` | `0.65` | Light height (lower = grazing = more relief). |
-| `lightRadius` | `0.9` | Orbit radius. |
+| `relief` | `1` | Exaggerates the normal map. |
+| `lightZ` | `1.4` | Light height (lower = grazing = more relief). |
+| `lightRadius` | `0.35` | Orbit radius. |
 | `lightSpeed` | `0.35` | Orbit speed (turns/sec). |
 | `lightAngle` | `-0.7` | Fixed light angle (rad) when `animateLight:false`. |
 | `lightColor` | `'#ffffff'` | Light color. |
 | `tint` | `null` | Hex color multiplied over the base. |
-| `opacity` | `1` | Figure opacity. |
+| `opacity` | `0.2` | Figure opacity. |
 | `blendMode` | `'normal'` | Figure `mix-blend-mode`. |
-| `brush` | `false` | Paint the real background inside the silhouette. |
-| `brushStrength` | `14` | Smear strength (px). |
-| `brushPosterize` | `5` | Color levels per channel (paint patches). 0 = off. |
-| `brushGrain` | `0.35` | Canvas/bristle grain (0–1). |
+| `brush` | `true` | Paint the real background inside the silhouette. |
+| `brushStrength` | `24` | Smear strength (px). |
+| `brushPosterize` | `17` | Color levels per channel (paint patches). 0 = off. |
+| `brushGrain` | `0.1` | Canvas/bristle grain (0–1). |
 | `brushUsesNormalMap` | `false` | `true` = rigid glass-like refraction following the shape. |
 | `shadow` | `null` | Shadow texture PNG (aligned to the figure). |
-| `shadowOpacity` | `0.6` | Shadow opacity. |
+| `shadowOpacity` | `0.3` | Shadow opacity. |
 | `shadowBlendMode` | `'normal'` | Shadow `mix-blend-mode`. |
 
 ## Package layout
@@ -127,9 +128,9 @@ npm run playground
 # or: npx http-server -c-1 -o playground/
 ```
 
-The playground uses local demo images under `playground/assets/` which are not
-tracked in git. Drop your own `image`, `normalMap` and (optional) `shadow` PNGs
-there to try the effect.
+The playground uses demo images under `playground/assets/` (tracked in the repo,
+but excluded from the npm package). Drop your own `image`, `normalMap` and
+(optional) `shadow` PNGs there to try your own figure.
 
 ## Browser support
 

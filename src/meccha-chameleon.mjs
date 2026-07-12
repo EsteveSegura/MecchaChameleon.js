@@ -27,41 +27,41 @@ const DEFAULTS = {
   width: 200,            // width in px (height keeps the image aspect ratio)
 
   // --- Light ---
-  animateLight: true,    // the light orbits on its own
+  animateLight: false,    // the light orbits on its own
   lightSpeed: 0.35,      // turns per second
-  lightRadius: 0.9,      // orbit radius (0..~1.5)
+  lightRadius: 0.35,      // orbit radius (0..~1.5)
   lightAngle: -0.7,      // fixed angle (rad) when animateLight = false
-  lightZ: 0.65,          // light height/closeness (lower = grazing = more relief)
+  lightZ: 1.4,          // light height/closeness (lower = grazing = more relief)
   lightColor: '#ffffff',
-  lightIntensity: 1.35,
+  lightIntensity: 0.45,
 
   ambient: 0.22,         // fill light (0 = black shadows)
   specularStrength: 0.75,// highlight strength
   specularHardness: 22,  // highlight size (higher = smaller spot)
 
-  relief: 1.4,           // exaggerates the normal map (1 = as-is)
+  relief: 1,           // exaggerates the normal map (1 = as-is)
   tint: null,            // hex color multiplied over the base color (e.g. '#8fd0ff')
 
   // --- Brush-painted background (CSS layer beneath the figure) ---
-  brush: false,          // paints the real background inside the silhouette
+  brush: true,          // paints the real background inside the silhouette
   brushUsesNormalMap: false, // true = rigid refraction following the shape (glass);
                          //         false = noise smear (brush strokes, more "painted")
-  brushStrength: 14,     // smear/displacement in px (the stroke drags the background)
+  brushStrength: 24,     // smear/displacement in px (the stroke drags the background)
   brushFrequency: 0.03,  // stroke size: lower = thicker stroke
   brushOctaves: 2,
   brushBlur: 1.0,        // blur in px -> wet-paint look
-  brushPosterize: 5,     // tones per channel (flattens color into patches). 0 = off
-  brushGrain: 0.35,      // canvas/bristle texture (0 = smooth, 1 = strong)
+  brushPosterize: 17,     // tones per channel (flattens color into patches). 0 = off
+  brushGrain: 0.1,      // canvas/bristle texture (0 = smooth, 1 = strong)
   brushSaturation: 1.25,
   brushContrast: 1.08,
 
   // --- Figure layer ---
-  opacity: 1,            // lower (e.g. 0.5) to see the painted background through the figure
+  opacity: 0.2,            // lower (e.g. 0.5) to see the painted background through the figure
   blendMode: 'normal',   // canvas mix-blend-mode ('multiply', 'screen'...)
 
   // --- Shadow layer (PNG texture on top of everything) ---
   shadow: null,          // shadow PNG URL (transparent, aligned to the figure)
-  shadowOpacity: 0.6,    // individual shadow opacity
+  shadowOpacity: 0.3,    // individual shadow opacity
   shadowBlendMode: 'normal', // shadow mix-blend-mode
 
   zIndex: 2147483000,
