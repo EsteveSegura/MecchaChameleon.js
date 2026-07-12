@@ -2,6 +2,15 @@
   "name": "meccha-chameleon",
   "version": "0.1.0",
   "description": "WebGL overlay that lights a 2D figure from a normal map (relief + specular), with an optional live brush-painted background and shadow layer. Floats above the page and is non-interactive.",
+  "homepage": "https://github.com/EsteveSegura/MecchaChameleon.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EsteveSegura/MecchaChameleon.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EsteveSegura/MecchaChameleon.js/issues"
+  },
+  "author": "Esteve Segura",
   "type": "commonjs",
   "main": "src/meccha-chameleon.js",
   "module": "src/meccha-chameleon.mjs",
