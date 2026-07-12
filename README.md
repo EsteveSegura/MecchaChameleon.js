@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/EsteveSegura/MecchaChameleon.js/main/docs/demo.gif" width="720" alt="MecchaChameleon.js demo">
+</p>
+
 # MecchaChameleon.js
 
 A tiny WebGL overlay that lights a 2D figure from a **normal map** (relief +

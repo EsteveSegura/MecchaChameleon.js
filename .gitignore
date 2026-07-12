@@ -10,6 +10,9 @@ _*.html
 # npm artifacts
 *.tgz
 
+# Screen-recording mp4s are not tracked (only docs/demo.gif is committed).
+*.mp4
+
 # NOTE: playground/assets/ (demo images) IS tracked on purpose, so the
 # playground runs from a fresh clone. Those images are NOT published to npm
 # anyway: the "files" whitelist in package.json only ships src/ + README + LICENSE.
