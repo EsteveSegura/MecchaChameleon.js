@@ -1,0 +1,15 @@
+node_modules/
+*.log
+.DS_Store
+
+# temp render/screenshot artifacts
+_*.png
+_*.js
+_*.html
+
+# npm artifacts
+*.tgz
+
+# NOTE: playground/assets/ (demo images) IS tracked on purpose, so the
+# playground runs from a fresh clone. Those images are NOT published to npm
+# anyway: the "files" whitelist in package.json only ships src/ + README + LICENSE.

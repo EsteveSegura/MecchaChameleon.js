@@ -1,0 +1,44 @@
+{
+  "name": "meccha-chameleon",
+  "version": "0.1.0",
+  "description": "WebGL overlay that lights a 2D figure from a normal map (relief + specular), with an optional live brush-painted background and shadow layer. Floats above the page and is non-interactive.",
+  "type": "commonjs",
+  "main": "src/meccha-chameleon.js",
+  "module": "src/meccha-chameleon.mjs",
+  "unpkg": "src/meccha-chameleon.js",
+  "jsdelivr": "src/meccha-chameleon.js",
+  "exports": {
+    ".": {
+      "import": "./src/meccha-chameleon.mjs",
+      "require": "./src/meccha-chameleon.js",
+      "default": "./src/meccha-chameleon.js"
+    },
+    "./presets/*": {
+      "import": "./src/presets/*.mjs",
+      "require": "./src/presets/*.js",
+      "default": "./src/presets/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "webgl",
+    "normal-map",
+    "overlay",
+    "shader",
+    "lighting",
+    "specular",
+    "canvas",
+    "brush",
+    "painterly"
+  ],
+  "scripts": {
+    "playground": "http-server -c-1 -p 8080 -o playground/"
+  },
+  "license": "MIT"
+}

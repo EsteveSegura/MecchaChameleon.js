@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MecchaChameleon.js: config generator</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; color: #fff; min-height: 100vh;
+      background:
+        linear-gradient(rgba(0,0,0,.28) 3px, transparent 3px) 0 0/38px 38px,
+        linear-gradient(90deg, rgba(0,0,0,.28) 3px, transparent 3px) 0 0/38px 38px,
+        linear-gradient(135deg,#1e88e5,#e53935 40%,#fdd835 70%,#43a047);
+    }
+    .intro { padding: 40px; font-size: 20px; line-height: 1.6; max-width: 620px;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+    .panel {
+      position: fixed; right: 16px; top: 16px; width: 250px; z-index: 2147483600;
+      background: rgba(20,20,26,.92); border: 1px solid #333; border-radius: 12px;
+      padding: 14px 16px; font-size: 12px; backdrop-filter: blur(6px);
+      max-height: calc(100vh - 32px); overflow: auto;
+    }
+    .panel h3 { margin: 0 0 10px; font-size: 13px; }
+    .row { margin: 9px 0; }
+    .row label { display: flex; justify-content: space-between; margin-bottom: 3px; color: #bbb; }
+    .row input[type=range] { width: 100%; }
+    .row input[type=color] { width: 100%; height: 26px; border: 0; background: none; }
+    .row input[type=text] { width: 100%; box-sizing: border-box; background: #12121a;
+      border: 1px solid #333; color: #fff; border-radius: 6px; padding: 5px 7px; font: inherit; }
+    .row.check { display: flex; align-items: center; gap: 8px; }
+
+    .codegen {
+      position: fixed; left: 16px; bottom: 16px; width: 360px; max-width: calc(100vw - 32px);
+      z-index: 2147483600; background: rgba(12,12,16,.94); border: 1px solid #333;
+      border-radius: 12px; padding: 12px 14px; font-size: 12px;
+    }
+    .codegen .hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .codegen h3 { margin: 0; font-size: 13px; }
+    .codegen button { font: inherit; cursor: pointer; border: 1px solid #4a4a55;
+      background: #2a2a33; color: #fff; border-radius: 7px; padding: 4px 10px; }
+    .codegen button:active { transform: translateY(1px); }
+    .codegen pre { margin: 0; max-height: 240px; overflow: auto; white-space: pre;
+      font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11.5px;
+      line-height: 1.5; color: #d6e2ff; }
+
+    /* Painting slider: a full-width band in normal flow (below the intro text,
+       so they never overlap). The track spans the whole width -- images cross
+       it edge to edge -- but each painting is a fixed-size card, not full-width. */
+    #paint-slider {
+      /* Taller than the card (560px) so the card's box-shadow has room and
+         is not clipped at the bottom. overflow:hidden only needs to hide the
+         cards that slide off the left/right edges. */
+      position: relative; width: 100%; height: 760px; overflow: hidden;
+      margin: 8px 0 40px; pointer-events: none;
+    }
+    #paint-slider img {
+      position: absolute; left: 50%; top: 50%;
+      width: 460px; height: 560px; object-fit: cover;
+      border-radius: 14px; background: #000;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .55);
+      will-change: transform;
+    }
+  </style>
+</head>
+<body>
+  <div class="intro">
+    <h1>MecchaChameleon.js</h1>
+    <p>Tune the effect with the sliders. The figure floats above everything,
+    is non-interactive (visual only) and is lit in 3D from the normal map.</p>
+    <p>The panel at the bottom-left shows the <strong>library config</strong> for
+    the current settings. Copy it and pass it to <code>MecchaChameleon.mount()</code>.</p>
+  </div>
+
+  <div id="paint-slider">
+    <img src="assets/paints/monalisa.jpg" alt="">
+    <img src="assets/paints/nocheestrellada.jpg" alt="">
+    <img src="assets/paints/Meisjemetdeparel.jpg" alt="">
+    <img src="assets/paints/elgrito.jpg" alt="">
+  </div>
+
+  <div class="panel">
+    <h3>Controls (live)</h3>
+    <div class="row"><label>Target selector</label><input type="text" id="target" placeholder="#hero  (empty = viewport center)" value="#paint-slider"></div>
+    <hr style="border:0;border-top:1px solid #333;margin:12px 0">
+    <div class="row"><label>Light intensity <span id="vI">0.45</span></label><input type="range" id="lightIntensity" min="0" max="3" step="0.05" value="0.45"></div>
+    <div class="row"><label>Ambient <span id="vA">0.22</span></label><input type="range" id="ambient" min="0" max="1" step="0.02" value="0.22"></div>
+    <div class="row"><label>Specular strength <span id="vSF">0.75</span></label><input type="range" id="specularStrength" min="0" max="2" step="0.05" value="0.75"></div>
+    <div class="row"><label>Specular hardness <span id="vSD">22</span></label><input type="range" id="specularHardness" min="2" max="80" step="1" value="22"></div>
+    <div class="row"><label>Relief <span id="vR">1</span></label><input type="range" id="relief" min="0.2" max="4" step="0.05" value="1"></div>
+    <div class="row"><label>Light height (lightZ) <span id="vZ">1.4</span></label><input type="range" id="lightZ" min="0.05" max="2" step="0.05" value="1.4"></div>
+    <div class="row"><label>Orbit radius <span id="vRa">0.35</span></label><input type="range" id="lightRadius" min="0" max="1.5" step="0.05" value="0.35"></div>
+    <div class="row"><label>Light speed <span id="vV">0.35</span></label><input type="range" id="lightSpeed" min="0" max="2" step="0.05" value="0.35"></div>
+    <div class="row"><label>Light color</label><input type="color" id="lightColor" value="#ffffff"></div>
+    <hr style="border:0;border-top:1px solid #333;margin:12px 0">
+    <div class="row"><label>Figure opacity <span id="vO">0.2</span></label><input type="range" id="opacity" min="0" max="1" step="0.05" value="0.2"></div>
+    <div class="row check"><input type="checkbox" id="brush" checked><label style="margin:0">Brush-painted background</label></div>
+    <div class="row"><label>Smear (strength) <span id="vBF">24</span></label><input type="range" id="brushStrength" min="0" max="60" step="1" value="24"></div>
+    <div class="row"><label>Posterize (levels) <span id="vP">17</span></label><input type="range" id="brushPosterize" min="0" max="32" step="1" value="17"></div>
+    <div class="row"><label>Canvas grain <span id="vG">0.1</span></label><input type="range" id="brushGrain" min="0" max="1" step="0.05" value="0.1"></div>
+    <hr style="border:0;border-top:1px solid #333;margin:12px 0">
+    <div class="row"><label>Shadow opacity <span id="vSo">0.3</span></label><input type="range" id="shadowOpacity" min="0" max="1" step="0.05" value="0.3"></div>
+  </div>
+
+  <div class="codegen">
+    <div class="hd">
+      <h3>Library config</h3>
+      <button id="copy">Copy</button>
+    </div>
+    <pre id="code"></pre>
+  </div>
+
+  <script src="../src/meccha-chameleon.js"></script>
+  <script>
+    // cfg holds EVERY control value, so the generated config is always complete.
+    var cfg = {
+      image: 'assets/mecha_chameleon_pose1_albedo.png',
+      normalMap: 'assets/mecha_chameleon_pose1_normal.png',
+      shadow: 'assets/mecha_chameleon_pose1_shadow.png',
+      target: '#paint-slider', width: 460,
+      animateLight: false,
+      lightIntensity: 0.45, ambient: 0.22,
+      specularStrength: 0.75, specularHardness: 22,
+      relief: 1, lightZ: 1.4, lightRadius: 0.35, lightSpeed: 0.35, lightColor: '#ffffff',
+      opacity: 0.2,
+      brush: true, brushStrength: 24, brushPosterize: 17, brushGrain: 0.1,
+      shadowOpacity: 0.3
+    };
+    MecchaChameleon.mount(cfg);
+
+    // ---- Live wiring ----
+    // Numeric sliders that apply live via update(). Each input id === config key.
+    var live = { lightIntensity:'vI', ambient:'vA', specularStrength:'vSF',
+      specularHardness:'vSD', relief:'vR', lightZ:'vZ', lightRadius:'vRa',
+      lightSpeed:'vV', opacity:'vO', shadowOpacity:'vSo' };
+    Object.keys(live).forEach(function (id) {
+      var el = document.getElementById(id), out = document.getElementById(live[id]);
+      el.addEventListener('input', function () {
+        var v = parseFloat(el.value); out.textContent = v;
+        cfg[id] = v; MecchaChameleon.update({ [id]: v }); genCode();
+      });
+    });
+    document.getElementById('lightColor').addEventListener('input', function (e) {
+      cfg.lightColor = e.target.value; MecchaChameleon.update({ lightColor: e.target.value }); genCode();
+    });
+    document.getElementById('target').addEventListener('input', function (e) {
+      cfg.target = e.target.value.trim() || null;
+      MecchaChameleon.update({ target: cfg.target }); genCode();
+    });
+
+    // Structural params -> re-mount with the accumulated cfg
+    document.getElementById('brush').addEventListener('change', function (e) {
+      cfg.brush = e.target.checked; MecchaChameleon.mount(cfg); genCode();
+    });
+    [['brushStrength','vBF'],['brushPosterize','vP'],['brushGrain','vG']].forEach(function (p) {
+      document.getElementById(p[0]).addEventListener('input', function (e) {
+        var v = parseFloat(e.target.value); document.getElementById(p[1]).textContent = v;
+        cfg[p[0]] = v; if (cfg.brush) MecchaChameleon.mount(cfg); genCode();
+      });
+    });
+
+    // ---- Config code generator ----
+    var ORDER = ['image','normalMap','shadow','target','width',
+      'animateLight','lightIntensity','ambient','specularStrength','specularHardness',
+      'relief','lightZ','lightRadius','lightSpeed','lightColor',
+      'opacity','brush','brushStrength','brushPosterize','brushGrain',
+      'shadowOpacity'];
+    var codeEl = document.getElementById('code');
+    function genCode() {
+      var lines = ORDER.map(function (k) {
+        var v = cfg[k];
+        if (typeof v === 'string') v = JSON.stringify(v);
+        return '  ' + k + ': ' + v;
+      });
+      codeEl.textContent = 'MecchaChameleon.mount({\n' + lines.join(',\n') + '\n});';
+    }
+    genCode();
+
+    document.getElementById('copy').addEventListener('click', function () {
+      var btn = this;
+      navigator.clipboard.writeText(codeEl.textContent).then(function () {
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1200);
+      }).catch(function () { btn.textContent = 'Ctrl+C'; });
+    });
+
+    // ---- Painting slider (behind the static chameleon) ----
+    // Each painting enters from the left, holds centered for 3s, then exits
+    // to the right while the next one enters. The chameleon stays fixed in the
+    // center because it is anchored to #paint-slider, not to the images.
+    (function () {
+      var slides = Array.prototype.slice.call(document.querySelectorAll('#paint-slider img'));
+      if (slides.length < 2) return;
+      var MOVE = 1100, HOLD = 3000, idx = 0;
+      // Off-screen left -> center -> off-screen right, spanning the whole
+      // viewport. Each card keeps its fixed size; only its position changes.
+      function place(el, pos, animate) {
+        el.style.transition = animate ? 'transform ' + MOVE + 'ms ease-in-out' : 'none';
+        el.style.transform = pos === 'center' ? 'translate(-50%, -50%)'
+          : pos === 'left' ? 'translate(calc(-50vw - 100%), -50%)'
+          : 'translate(50vw, -50%)';
+      }
+      slides.forEach(function (s, k) { place(s, k === 0 ? 'center' : 'left', false); });
+      function next() {
+        var cur = slides[idx], ni = (idx + 1) % slides.length, nxt = slides[ni];
+        place(nxt, 'left', false);
+        void nxt.offsetWidth;           // reflow so the start position applies
+        place(cur, 'right', true);      // current exits to the right
+        place(nxt, 'center', true);     // next enters from the left
+        idx = ni;
+        setTimeout(function () { place(cur, 'left', false); }, MOVE + 60);
+      }
+      (function cycle() {
+        setTimeout(function () { next(); setTimeout(cycle, MOVE); }, HOLD);
+      })();
+    })();
+  </script>
+</body>
+</html>
